@@ -76,13 +76,24 @@ This will generate the following classes for `getItems` method mentioned in the 
 - `GetUserBloc`: bloc inherited from the base `ActivityBloc` which wraps method call into a bloc
 - `GetUserState`: bloc state which describes operation's status, input, output and failure
 
-If you want to use another prefix for generated classes rather than method name you can
+If you want to use another type prefix for generated classes rather than method name you can
 use `@Activity` instead of `@activity` and supply `name` like this:
 
 ```dart
 @Activity(name: 'getCurrentUser')
 Future<Either<Failure, User>> getUser(...
 ```
+
+In order to add prefix to all generated classes you can use `@Activities` instead of `@activities`
+and supply `prefix` like this:
+
+```dart
+@Activitis(prefix: 'Users')
+class UsersRepository {...
+```
+
+Note that the `name` overriden within `@Activity` ignores any `prefix` supplied to `@Activities` and
+allows to fully customize generated classes naming.
 
 ## Use
 
