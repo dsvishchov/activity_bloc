@@ -28,7 +28,7 @@ class ActivityBlocGenerator {
   }
 
   String get _inputDefinition {
-    if (!_hasInput) {
+    if (_namedParameters.isEmpty) {
       return '';
     }
 
@@ -66,10 +66,13 @@ class ActivityBlocGenerator {
       _throwInvalidReturnTypeError(method);
     }
 
+    final hasInput = _namedParameters.isNotEmpty;
+    final hasOutput = eitherType.typeArguments[1].element?.name != null;
+
     final activityTypes = [
-      _hasInput ? inputTypeName : 'void',
-      eitherType.typeArguments[1].element?.name ?? 'void',
-      eitherType.typeArguments[0].element?.name ?? 'void',
+      hasInput ? inputTypeName : 'void',
+      eitherType.typeArguments[1].getDisplayString(),
+      eitherType.typeArguments[0].getDisplayString(),
     ];
 
     final activityParameters = _namedParameters
@@ -82,8 +85,8 @@ class ActivityBlocGenerator {
       final class $blocTypeName extends ActivityBloc<${activityTypes.join(', ')}> {
         $blocTypeName({
           required this.source,
-          ${_hasInput ? 'super.input,' : '// No input'}
-          super.output,
+          ${hasInput ? 'super.input,' : '// No input'}
+          ${hasOutput ? 'super.output,' : '// No output'}
           super.runImmediately,
           super.runSilently,
         }) : super(
@@ -111,8 +114,6 @@ class ActivityBlocGenerator {
 
   List<ParameterElement> get _namedParameters =>
     method.parameters.where((parameter) => parameter.isNamed).toList();
-
-  bool get _hasInput => _namedParameters.isNotEmpty;
 
   void _throwInvalidReturnTypeError(Element element) {
     throw InvalidGenerationSourceError(
