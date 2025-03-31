@@ -5,9 +5,11 @@ import 'package:meta/meta_meta.dart';
 class Activity {
   const Activity({
     this.name,
+    this.prefix,
   });
 
   final String? name;
+  final String? prefix;
 }
 
 const activity = Activity();

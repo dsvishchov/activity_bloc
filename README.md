@@ -76,24 +76,30 @@ This will generate the following classes for `getItems` method mentioned in the 
 - `GetUserBloc`: bloc inherited from the base `ActivityBloc` which wraps method call into a bloc
 - `GetUserState`: bloc state which describes operation's status, input, output and failure
 
-If you want to use another type prefix for generated classes rather than method name you can
-use `@Activity` instead of `@activity` and supply `name` like this:
+Sometimes we prefer to use short names for class methods and assume that the class name itself
+is descriptive enough, for example we might name `getUser` just `get`. In this case in order to
+get descriptive activity blocs names one should support either `prefix` on the class-level
+annotation or `prefix` and/or `name` on the method-level annotation.
+
+In order to add an additional prefix to all generated blocs you can use `@Activities`
+instead of `@activities` and supply `prefix` like this:
 
 ```dart
-@Activity(name: 'getCurrentUser')
-Future<Either<Failure, User>> getUser(...
-```
-
-In order to add prefix to all generated classes you can use `@Activities` instead of `@activities`
-and supply `prefix` like this:
-
-```dart
-@Activitis(prefix: 'Users')
+@Activities(prefix: 'User')
 class UsersRepository {...
+  @activity
+  Future<Either<Failure, User>> get(... // UserGetBloc
 ```
 
-Note that the `name` overriden within `@Activity` ignores any `prefix` supplied to `@Activities` and
-allows to fully customize generated classes naming.
+If you want to use another prefix or a completely different name for a single method
+you can use `@Activity` instead of `@activity` and supply `name` and/or `prefix` like this:
+
+```dart
+@Activity(name: 'GetUser')
+Future<Either<Failure, User>> get(... // GetUserBloc
+```
+
+Note that the method-level `prefix` and/or `name` overrides any class-level `prefix`.
 
 ## Use
 
