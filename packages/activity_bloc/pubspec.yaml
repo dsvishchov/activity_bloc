@@ -1,6 +1,6 @@
 name: activity_bloc
 description: Easily wrap async functions into blocs to manage their execution states
-version: 0.0.3
+version: 0.0.4
 repository: https://github.com/dsvishchov/activity_bloc
 issue_tracker: https://github.com/dsvishchov/activity_bloc/issues
 

@@ -82,6 +82,9 @@ class ActivityBlocGenerator {
     return '''
       typedef $stateTypeName = ActivityState<${activityTypes.join(', ')}>;
 
+      typedef ${_typePrefix}Event = ActivityEvent;
+      typedef ${_typePrefix}Run = ActivityRun;
+
       final class $blocTypeName extends ActivityBloc<${activityTypes.join(', ')}> {
         $blocTypeName({
           required this.source,

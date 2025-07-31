@@ -1,3 +1,7 @@
+## 0.0.4
+
+- Add type definitions generation for bloc and run bloc event types
+
 ## 0.0.3
 
 - Fix issue with improper code generation for compound output or failure types
