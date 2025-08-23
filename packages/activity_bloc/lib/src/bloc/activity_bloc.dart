@@ -42,6 +42,7 @@ class ActivityBloc<I, O, F> extends Bloc<ActivityEvent, ActivityState<I, O, F>> 
     ),
   ) {
     on<ActivityRun<I>>(_onRun);
+    on<ActivityReset>(_onReset);
 
     if (runImmediately) {
       run(
@@ -67,6 +68,10 @@ class ActivityBloc<I, O, F> extends Bloc<ActivityEvent, ActivityState<I, O, F>> 
     bool silently = false,
   }) {
     add(ActivityRun<I>(input, silently));
+  }
+
+  void reset() {
+    add(const ActivityReset());
   }
 
   Future<void> runAndWait({
@@ -107,6 +112,13 @@ class ActivityBloc<I, O, F> extends Bloc<ActivityEvent, ActivityState<I, O, F>> 
     );
 
     return value ?? otherwise!.call();
+  }
+
+  Future<void> _onReset(
+    ActivityReset event,
+    Emitter<ActivityState<I, O, F>> emit,
+  ) async {
+    emit(state._initial());
   }
 
   Future<void> _onRun(

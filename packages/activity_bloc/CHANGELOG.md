@@ -1,3 +1,7 @@
+## 0.0.5
+
+- Add support to reset bloc state
+
 ## 0.0.4
 
 - Add type definitions generation for bloc and run bloc event types

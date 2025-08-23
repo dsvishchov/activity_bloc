@@ -13,3 +13,7 @@ final class ActivityRun<I> extends ActivityEvent {
   final I? input;
   final bool silently;
 }
+
+final class ActivityReset extends ActivityEvent {
+  const ActivityReset();
+}
