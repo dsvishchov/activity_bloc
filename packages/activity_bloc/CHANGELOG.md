@@ -1,3 +1,7 @@
+## 0.0.6
+
+- Rest whole state of bloc including failure, input and output
+
 ## 0.0.5
 
 - Add support to reset bloc state

@@ -35,6 +35,9 @@ class ActivityState<I, O, F> extends Equatable {
   ActivityState<I, O, F> _initial() {
     return _copyWith(
       status: ActivityStatus.initial,
+      failure: null,
+      input: null,
+      output: null,
       updatedAt: DateTime.now(),
     );
   }
