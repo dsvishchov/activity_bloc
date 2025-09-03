@@ -33,7 +33,7 @@ class ActivityBloc<I, O, F> extends Bloc<ActivityEvent, ActivityState<I, O, F>> 
     required this.activity,
     I? input,
     O? output,
-    Object? scope,
+    Enum? scope,
     bool runImmediately = false,
     bool runSilently = false,
   }) : super(
@@ -69,7 +69,7 @@ class ActivityBloc<I, O, F> extends Bloc<ActivityEvent, ActivityState<I, O, F>> 
 
   void run({
     I? input,
-    Object? scope,
+    Enum? scope,
     bool silently = false,
   }) {
     add(
@@ -87,7 +87,7 @@ class ActivityBloc<I, O, F> extends Bloc<ActivityEvent, ActivityState<I, O, F>> 
 
   Future<void> runAndWait({
     I? input,
-    Object? scope,
+    Enum? scope,
     bool silently = true,
     Duration minWaitTime = const Duration(milliseconds: 500),
   }) async {
@@ -179,7 +179,7 @@ extension ActivityWithInputToBloc<I, O, F> on ActivityWithInput<I, O, F> {
   ActivityBloc<I, O, F> asActivityBloc({
     I? input,
     O? output,
-    Object? scope,
+    Enum? scope,
     bool runImmediately = false,
     bool runSilently = false,
   }) {
@@ -198,7 +198,7 @@ extension ActivityWithInputToBloc<I, O, F> on ActivityWithInput<I, O, F> {
 extension ActivityWithNoInputToBloc<O, F> on ActivityWithNoInput<O, F> {
   ActivityBloc<void, O, F> asActivityBloc({
     O? output,
-    Object? scope,
+    Enum? scope,
     bool runImmediately = false,
     bool runSilently = false,
   }) {

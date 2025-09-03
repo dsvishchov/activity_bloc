@@ -21,7 +21,7 @@ class ActivityState<I, O, F> extends Equatable {
   final F? failure;
   final I? input;
   final O? output;
-  final Object? scope;
+  final Enum? scope;
   final DateTime? updatedAt;
 
   bool get isInitial
@@ -46,7 +46,7 @@ class ActivityState<I, O, F> extends Equatable {
 
   ActivityState<I, O, F> _running([
     I? input,
-    Object? scope,
+    Enum? scope,
   ]) {
     return _copyWith(
       input: input ?? this.input,
@@ -58,7 +58,7 @@ class ActivityState<I, O, F> extends Equatable {
 
   ActivityState<I, O, F> _completed([
     O? output,
-    Object? scope,
+    Enum? scope,
   ]) {
     return _copyWith(
       status: ActivityStatus.completed,
@@ -71,7 +71,7 @@ class ActivityState<I, O, F> extends Equatable {
 
   ActivityState<I, O, F> _failed([
     F? failure,
-    Object? scope,
+    Enum? scope,
   ]) {
     return _copyWith(
       status: ActivityStatus.failed,
@@ -95,7 +95,7 @@ class ActivityState<I, O, F> extends Equatable {
       failure: failure is F? ? failure : this.failure,
       input: input is I? ? input : this.input,
       output: output is O? ? output : this.output,
-      scope: scope == _Undefined ? this.scope : scope,
+      scope: scope is Enum? ? scope : this.scope,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
     );
   }

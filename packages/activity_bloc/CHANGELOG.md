@@ -1,3 +1,7 @@
+## 0.0.8
+
+- Limit scope to enums only
+
 ## 0.0.7
 
 - Add support for passing optional scope of running to distinguish between different contexts when needed

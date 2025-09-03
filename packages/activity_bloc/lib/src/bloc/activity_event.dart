@@ -12,7 +12,7 @@ final class ActivityRun<I> extends ActivityEvent {
 });
 
   final I? input;
-  final Object? scope;
+  final Enum? scope;
   final bool silently;
 }
 
