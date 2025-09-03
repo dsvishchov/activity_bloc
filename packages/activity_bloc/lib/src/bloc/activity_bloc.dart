@@ -33,12 +33,14 @@ class ActivityBloc<I, O, F> extends Bloc<ActivityEvent, ActivityState<I, O, F>> 
     required this.activity,
     I? input,
     O? output,
+    Object? scope,
     bool runImmediately = false,
     bool runSilently = false,
   }) : super(
     ActivityState<I, O, F>(
       input: input,
       output: output,
+      scope: scope,
     ),
   ) {
     on<ActivityRun<I>>(_onRun);
@@ -63,11 +65,20 @@ class ActivityBloc<I, O, F> extends Bloc<ActivityEvent, ActivityState<I, O, F>> 
   bool get isCompleted => state.isCompleted;
   bool get isFailed => state.isFailed;
 
+  Object? get scope => state.scope;
+
   void run({
     I? input,
+    Object? scope,
     bool silently = false,
   }) {
-    add(ActivityRun<I>(input, silently));
+    add(
+      ActivityRun<I>(
+        input: input,
+        scope: scope,
+        silently: silently,
+      )
+    );
   }
 
   void reset() {
@@ -76,11 +87,13 @@ class ActivityBloc<I, O, F> extends Bloc<ActivityEvent, ActivityState<I, O, F>> 
 
   Future<void> runAndWait({
     I? input,
+    Object? scope,
     bool silently = true,
     Duration minWaitTime = const Duration(milliseconds: 500),
   }) async {
     run(
       input: input,
+      scope: scope,
       silently: silently,
     );
 
@@ -127,12 +140,27 @@ class ActivityBloc<I, O, F> extends Bloc<ActivityEvent, ActivityState<I, O, F>> 
   ) async {
     if ((state.output == null) || !state.isInitial) {
       if (!event.silently) {
-        emit(state._running(event.input));
+        emit(
+          state._running(
+            event.input,
+            event.scope,
+          )
+        );
       }
       final result = await activity(event.input ?? state.input as I);
       result.fold(
-        (F failure) => emit(state._failed(failure)),
-        (O output) => emit(state._completed(output)),
+        (F failure) => emit(
+          state._failed(
+            failure,
+            event.scope,
+          ),
+        ),
+        (O output) => emit(
+          state._completed(
+            output,
+            event.scope,
+          ),
+        ),
       );
     } else {
       emit(state._completed());
@@ -151,6 +179,7 @@ extension ActivityWithInputToBloc<I, O, F> on ActivityWithInput<I, O, F> {
   ActivityBloc<I, O, F> asActivityBloc({
     I? input,
     O? output,
+    Object? scope,
     bool runImmediately = false,
     bool runSilently = false,
   }) {
@@ -158,6 +187,7 @@ extension ActivityWithInputToBloc<I, O, F> on ActivityWithInput<I, O, F> {
       activity: this,
       input: input,
       output: output,
+      scope: scope,
       runImmediately: runImmediately,
       runSilently: runSilently,
     );
@@ -168,12 +198,14 @@ extension ActivityWithInputToBloc<I, O, F> on ActivityWithInput<I, O, F> {
 extension ActivityWithNoInputToBloc<O, F> on ActivityWithNoInput<O, F> {
   ActivityBloc<void, O, F> asActivityBloc({
     O? output,
+    Object? scope,
     bool runImmediately = false,
     bool runSilently = false,
   }) {
     return ActivityBloc<void, O, F>(
       activity: (_) => this(),
       output: output,
+      scope: scope,
       runImmediately: runImmediately,
       runSilently: runSilently,
     );

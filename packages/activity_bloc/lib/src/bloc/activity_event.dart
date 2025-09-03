@@ -5,12 +5,14 @@ sealed class ActivityEvent {
 }
 
 final class ActivityRun<I> extends ActivityEvent {
-  const ActivityRun([
+  const ActivityRun({
     this.input,
+    this.scope,
     this.silently = false,
-  ]);
+});
 
   final I? input;
+  final Object? scope;
   final bool silently;
 }
 

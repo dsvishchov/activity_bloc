@@ -13,6 +13,7 @@ class ActivityState<I, O, F> extends Equatable {
     this.failure,
     this.input,
     this.output,
+    this.scope,
     this.updatedAt,
   });
 
@@ -20,6 +21,7 @@ class ActivityState<I, O, F> extends Equatable {
   final F? failure;
   final I? input;
   final O? output;
+  final Object? scope;
   final DateTime? updatedAt;
 
   bool get isInitial
@@ -42,28 +44,40 @@ class ActivityState<I, O, F> extends Equatable {
     );
   }
 
-  ActivityState<I, O, F> _running([I? input]) {
+  ActivityState<I, O, F> _running([
+    I? input,
+    Object? scope,
+  ]) {
     return _copyWith(
       input: input ?? this.input,
+      scope: scope ?? this.scope,
       status: ActivityStatus.running,
       updatedAt: DateTime.now(),
     );
   }
 
-  ActivityState<I, O, F> _completed([O? output]) {
+  ActivityState<I, O, F> _completed([
+    O? output,
+    Object? scope,
+  ]) {
     return _copyWith(
       status: ActivityStatus.completed,
       output: output ?? this.output,
       failure: null,
+      scope: scope ?? this.scope,
       updatedAt: DateTime.now(),
     );
   }
 
-  ActivityState<I, O, F> _failed(F? failure) {
+  ActivityState<I, O, F> _failed([
+    F? failure,
+    Object? scope,
+  ]) {
     return _copyWith(
       status: ActivityStatus.failed,
       output: null,
       failure: failure,
+      scope: scope ?? this.scope,
       updatedAt: DateTime.now(),
     );
   }
@@ -73,6 +87,7 @@ class ActivityState<I, O, F> extends Equatable {
     Object? failure = _Undefined,
     Object? input = _Undefined,
     Object? output = _Undefined,
+    Object? scope = _Undefined,
     Object? updatedAt = _Undefined,
   }) {
     return ActivityState<I, O, F>(
@@ -80,6 +95,7 @@ class ActivityState<I, O, F> extends Equatable {
       failure: failure is F? ? failure : this.failure,
       input: input is I? ? input : this.input,
       output: output is O? ? output : this.output,
+      scope: scope == _Undefined ? this.scope : scope,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
     );
   }
@@ -90,6 +106,7 @@ class ActivityState<I, O, F> extends Equatable {
     failure,
     input,
     output,
+    scope,
     updatedAt,
   ];
 }

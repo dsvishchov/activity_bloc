@@ -6,6 +6,10 @@ import 'users_repository.dart';
 
 final locator = GetIt.instance;
 
+enum GetUserScope {
+  direct,
+}
+
 void main() {
   locator.registerSingleton(UsersRepository());
 
@@ -43,6 +47,7 @@ class MyApp extends StatelessWidget {
             onPressed: !getUser.isRunning
               ? () => getUser.run(
                   input: GetUserInput(id: 1),
+                  scope: GetUserScope.direct,
                 )
               : null,
             child: Text('Get user'),
@@ -50,7 +55,7 @@ class MyApp extends StatelessWidget {
           getUser.when<Widget>(
             initial: () => Text('Click button above to get user data'),
             running: () => CircularProgressIndicator(),
-            completed: (user) => Text('User: ${user.firstName} ${user.lastName}'),
+            completed: (user) => Text('User: ${user.firstName} ${user.lastName} (scope: ${getUser.scope})'),
             failed: (failure) => Text('Failure: ${failure.message}'),
           ),
         ],

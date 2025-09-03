@@ -1,6 +1,10 @@
+## 0.0.7
+
+- Add support for passing optional scope of running to distinguish between different contexts when needed
+
 ## 0.0.6
 
-- Rest whole state of bloc including failure, input and output
+- Reset whole state of bloc including failure, input and output
 
 ## 0.0.5
 

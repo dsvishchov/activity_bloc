@@ -90,6 +90,7 @@ class ActivityBlocGenerator {
           required this.source,
           ${hasInput ? 'super.input,' : '// No input'}
           ${hasOutput ? 'super.output,' : '// No output'}
+          super.scope,
           super.runImmediately,
           super.runSilently,
         }) : super(
