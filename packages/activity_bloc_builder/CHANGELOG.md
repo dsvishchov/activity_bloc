@@ -1,4 +1,4 @@
-## 0.0.9
+## 0.0.9-10
 
 - Switch to a newer version of analyzer and add support for source_gen 3.0+
 

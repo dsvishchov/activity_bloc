@@ -1,6 +1,6 @@
 name: activity_bloc_builder
 description: A code generator companion for activity_bloc
-version: 0.0.9
+version: 0.0.10
 repository: https://github.com/dsvishchov/activity_bloc
 issue_tracker: https://github.com/dsvishchov/activity_bloc/issues
 
@@ -8,8 +8,8 @@ environment:
   sdk: ">=3.4.0 <4.0.0"
 
 dependencies:
-  activity_bloc: ^0.0.9
+  activity_bloc: ^0.0.10
   analyzer: ^7.5.9
-  build: ">=2.0.0 <4.0.0"
+  build: ">=3.0.0 <4.0.0"
   meta: ^1.9.0
-  source_gen: ">=2.0.0 <4.0.0"
+  source_gen: ">=3.0.0 <4.0.0"
