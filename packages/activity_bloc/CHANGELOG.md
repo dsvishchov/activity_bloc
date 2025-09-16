@@ -1,4 +1,8 @@
-## 0.0.9-10
+## 0.0.10
+
+- Increase build and source_gen versions lower constraint
+
+## 0.0.9
 
 - Switch to a newer version of analyzer and add support for source_gen 3.0+
 
