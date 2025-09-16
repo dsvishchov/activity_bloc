@@ -1,3 +1,7 @@
+## 0.0.9
+
+- Switch to a newer version of analyzer and add support for source_gen 3.0+
+
 ## 0.0.8
 
 - Limit scope to enums only

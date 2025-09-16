@@ -1,5 +1,5 @@
 import 'package:activity_bloc/activity_bloc.dart';
-import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 
@@ -8,27 +8,27 @@ import 'activity_bloc_generator.dart';
 class ActivitiesGenerator extends GeneratorForAnnotation<Activities> {
   @override
   String generateForAnnotatedElement(
-    Element element,
+    Element2 element,
     ConstantReader annotation,
     BuildStep buildStep,
   ) {
-    if (element is! ClassElement) {
+    if (element is! ClassElement2) {
       _throwInvalidTargetError(element);
     }
-    final definingClass = element as ClassElement;
+    final definingClass = element as ClassElement2;
     final definingClassAnnotation = _getActivitiesAnnotation(definingClass);
 
     final buffer = StringBuffer();
 
-    final methods = definingClass.methods;
+    final methods = definingClass.firstFragment.methods2;
     for (final method in methods) {
-      final methodAnnotation = _getActivityAnnotation(method);
+      final methodAnnotation = _getActivityAnnotation(method.element);
 
       if (methodAnnotation != null) {
         final blocGenerator = ActivityBlocGenerator(
           definingClass: definingClass,
           definingClassAnnotation: definingClassAnnotation,
-          method: method,
+          method: method.element,
           methodAnnotation: methodAnnotation,
         );
 
@@ -39,9 +39,9 @@ class ActivitiesGenerator extends GeneratorForAnnotation<Activities> {
     return buffer.toString();
   }
 
-  Activities _getActivitiesAnnotation(ClassElement element) {
+  Activities _getActivitiesAnnotation(ClassElement2 element) {
     final annotation = const TypeChecker
-      .fromRuntime(Activities)
+      .typeNamed(Activities)
       .firstAnnotationOf(element);
 
     final reader = ConstantReader(annotation);
@@ -52,9 +52,9 @@ class ActivitiesGenerator extends GeneratorForAnnotation<Activities> {
     );
   }
 
-  Activity? _getActivityAnnotation(MethodElement element) {
+  Activity? _getActivityAnnotation(MethodElement2 element) {
     final annotation = const TypeChecker
-      .fromRuntime(Activity)
+      .typeNamed(Activity)
       .firstAnnotationOf(element);
 
     if (annotation == null) {
@@ -71,7 +71,7 @@ class ActivitiesGenerator extends GeneratorForAnnotation<Activities> {
     );
   }
 
-  void _throwInvalidTargetError(Element element) {
+  void _throwInvalidTargetError(Element2 element) {
     throw InvalidGenerationSourceError(
       '@activities can only be applied to classes.',
       element: element,

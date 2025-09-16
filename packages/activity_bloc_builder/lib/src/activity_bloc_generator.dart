@@ -1,5 +1,5 @@
 import 'package:activity_bloc/activity_bloc.dart';
-import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:source_gen/source_gen.dart';
 
@@ -11,9 +11,9 @@ class ActivityBlocGenerator {
     required this.methodAnnotation,
   });
 
-  final ClassElement definingClass;
+  final ClassElement2 definingClass;
   final Activities definingClassAnnotation;
-  final MethodElement method;
+  final MethodElement2 method;
   final Activity methodAnnotation;
 
   String get inputTypeName => '${_typePrefix}Input';
@@ -33,10 +33,10 @@ class ActivityBlocGenerator {
     }
 
     final constructorParameters = _namedParameters
-      .map((parameter) => '${parameter.isRequired ? 'required ' : ''} this.${parameter.name},')
+      .map((parameter) => '${parameter.isRequired ? 'required ' : ''} this.${parameter.firstFragment.name2},')
       .join('\n');
     final fields = _namedParameters
-      .map((parameter) => 'final ${parameter.type.getDisplayString()} ${parameter.name};')
+      .map((parameter) => 'final ${parameter.type.getDisplayString()} ${parameter.firstFragment.name2};')
       .join('\n');
 
     return '''
@@ -57,7 +57,7 @@ class ActivityBlocGenerator {
 
     final returnType = method.returnType as InterfaceType;
     final posiblyEitherType = returnType.typeArguments.firstOrNull;
-    if ((posiblyEitherType?.element?.name != 'Either') || (posiblyEitherType is! InterfaceType)) {
+    if ((posiblyEitherType?.element3?.firstFragment.name2 != 'Either') || (posiblyEitherType is! InterfaceType)) {
       _throwInvalidReturnTypeError(method);
     }
 
@@ -67,7 +67,7 @@ class ActivityBlocGenerator {
     }
 
     final hasInput = _namedParameters.isNotEmpty;
-    final hasOutput = eitherType.typeArguments[1].element?.name != null;
+    final hasOutput = eitherType.typeArguments[1].element3?.firstFragment.name2 != null;
 
     final activityTypes = [
       hasInput ? inputTypeName : 'void',
@@ -76,7 +76,7 @@ class ActivityBlocGenerator {
     ];
 
     final activityParameters = _namedParameters
-      .map((parameter) => '${parameter.name}: input.${parameter.name},')
+      .map((parameter) => '${parameter.firstFragment.name2}: input.${parameter.firstFragment.name2},')
       .join('\n');
 
     return '''
@@ -94,17 +94,17 @@ class ActivityBlocGenerator {
           super.runImmediately,
           super.runSilently,
         }) : super(
-          activity: (input) => source.${method.name}(
+          activity: (input) => source.${method.firstFragment.name2}(
             $activityParameters
           ),
         );
 
-        final ${definingClass.name} source;
+        final ${definingClass.firstFragment.name2} source;
       }
     ''';
   }
 
-  String get _name => methodAnnotation.name ?? method.name;
+  String get _name => methodAnnotation.name ?? method.firstFragment.name2!;
 
   String get _typePrefix {
     final capitalizedName = '${_name[0].toUpperCase()}${_name.substring(1)}';
@@ -116,10 +116,14 @@ class ActivityBlocGenerator {
       : '${methodAnnotation.prefix ?? ''}$capitalizedName';
   }
 
-  List<ParameterElement> get _namedParameters =>
-    method.parameters.where((parameter) => parameter.isNamed).toList();
+  List<FormalParameterElement> get _namedParameters {
+    return method.firstFragment.formalParameters
+      .where((fragment) => fragment.element.isNamed)
+      .map((fragment) => fragment.element)
+      .toList();
+  }
 
-  void _throwInvalidReturnTypeError(Element element) {
+  void _throwInvalidReturnTypeError(Element2 element) {
     throw InvalidGenerationSourceError(
       '@activity can only be applied to async methods with return type of Future<Either<F, O>>',
       element: element,
