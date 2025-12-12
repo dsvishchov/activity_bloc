@@ -6,3 +6,4 @@
 .dart_tool/
 devtools_options.yaml
 pubspec.lock
+pubspec_overrides.yaml

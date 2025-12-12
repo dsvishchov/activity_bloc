@@ -39,3 +39,4 @@ test/
 
 **/*.g.dart
 pubspec.lock
+pubspec_overrides.yaml
