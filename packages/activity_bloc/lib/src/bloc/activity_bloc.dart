@@ -77,7 +77,7 @@ class ActivityBloc<I, O, F> extends Bloc<ActivityEvent, ActivityState<I, O, F>> 
         input: input,
         scope: scope,
         silently: silently,
-      )
+      ),
     );
   }
 
@@ -144,7 +144,7 @@ class ActivityBloc<I, O, F> extends Bloc<ActivityEvent, ActivityState<I, O, F>> 
           state._running(
             event.input,
             event.scope,
-          )
+          ),
         );
       }
       final result = await activity(event.input ?? state.input as I);
