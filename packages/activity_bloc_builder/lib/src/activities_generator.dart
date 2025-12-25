@@ -1,5 +1,5 @@
 import 'package:activity_bloc/activity_bloc.dart';
-import 'package:analyzer/dart/element/element2.dart';
+import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 
@@ -8,19 +8,19 @@ import 'activity_bloc_generator.dart';
 class ActivitiesGenerator extends GeneratorForAnnotation<Activities> {
   @override
   String generateForAnnotatedElement(
-    Element2 element,
+    Element element,
     ConstantReader annotation,
     BuildStep buildStep,
   ) {
-    if (element is! ClassElement2) {
+    if (element is! ClassElement) {
       _throwInvalidTargetError(element);
     }
-    final definingClass = element as ClassElement2;
+    final definingClass = element as ClassElement;
     final definingClassAnnotation = _getActivitiesAnnotation(definingClass);
 
     final buffer = StringBuffer();
 
-    final methods = definingClass.firstFragment.methods2;
+    final methods = definingClass.firstFragment.methods;
     for (final method in methods) {
       final methodAnnotation = _getActivityAnnotation(method.element);
 
@@ -39,7 +39,7 @@ class ActivitiesGenerator extends GeneratorForAnnotation<Activities> {
     return buffer.toString();
   }
 
-  Activities _getActivitiesAnnotation(ClassElement2 element) {
+  Activities _getActivitiesAnnotation(ClassElement element) {
     final annotation = const TypeChecker
       .typeNamed(Activities)
       .firstAnnotationOf(element);
@@ -52,7 +52,7 @@ class ActivitiesGenerator extends GeneratorForAnnotation<Activities> {
     );
   }
 
-  Activity? _getActivityAnnotation(MethodElement2 element) {
+  Activity? _getActivityAnnotation(MethodElement element) {
     final annotation = const TypeChecker
       .typeNamed(Activity)
       .firstAnnotationOf(element);
@@ -71,7 +71,7 @@ class ActivitiesGenerator extends GeneratorForAnnotation<Activities> {
     );
   }
 
-  void _throwInvalidTargetError(Element2 element) {
+  void _throwInvalidTargetError(Element element) {
     throw InvalidGenerationSourceError(
       '@activities can only be applied to classes.',
       element: element,

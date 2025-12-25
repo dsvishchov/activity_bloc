@@ -1,3 +1,7 @@
+## 0.0.11
+
+- Migrate to analyzer ^8.0.0
+
 ## 0.0.10
 
 - Increase build and source_gen versions lower constraint
