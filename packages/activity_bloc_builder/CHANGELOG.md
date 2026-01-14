@@ -1,3 +1,8 @@
+## 0.0.12
+
+- Add 'when' to ActivityState but still expose to ActivityBloc as well
+- Upgrade Dart version lower constraint to 3.10.0
+
 ## 0.0.11
 
 - Migrate to analyzer ^8.0.0

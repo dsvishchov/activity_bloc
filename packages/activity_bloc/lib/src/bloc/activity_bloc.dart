@@ -110,21 +110,13 @@ class ActivityBloc<I, O, F> extends Bloc<ActivityEvent, ActivityState<I, O, F>> 
     T Function(F failure)? failed,
     T Function()? otherwise,
   }) {
-    final value = switch (state.status) {
-      ActivityStatus.initial => initial?.call(),
-      ActivityStatus.running => running?.call(),
-      // ignore: null_check_on_nullable_type_parameter
-      ActivityStatus.completed => completed?.call(state.output!),
-      // ignore: null_check_on_nullable_type_parameter
-      ActivityStatus.failed => failed?.call(state.failure!),
-    };
-
-    assert(
-      value != null || otherwise != null,
-      'Either `${state.status.name}` or `otherwise` callback should be provided',
+    return state.when(
+      initial: initial,
+      running: running,
+      completed: completed,
+      failed: failed,
+      otherwise: otherwise,
     );
-
-    return value ?? otherwise!.call();
   }
 
   Future<void> _onReset(

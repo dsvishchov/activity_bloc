@@ -24,19 +24,39 @@ class ActivityState<I, O, F> extends Equatable {
   final Enum? scope;
   final DateTime? updatedAt;
 
-  bool get isInitial
-    => status == ActivityStatus.initial;
-  bool get isRunning
-    => status == ActivityStatus.running;
-  bool get isCompleted
-    => status == ActivityStatus.completed;
-  bool get isFailed
-    => status == ActivityStatus.failed;
+  bool get isInitial => status == .initial;
+  bool get isRunning => status == .running;
+  bool get isCompleted => status == .completed;
+  bool get isFailed => status == .failed;
+
+  T when<T>({
+    T Function()? initial,
+    T Function()? running,
+    T Function(O output)? completed,
+    T Function(F failure)? failed,
+    T Function()? otherwise,
+  }) {
+    final value = switch (status) {
+      .initial => initial?.call(),
+      .running => running?.call(),
+      // ignore: null_check_on_nullable_type_parameter
+      .completed => completed?.call(output!),
+      // ignore: null_check_on_nullable_type_parameter
+      .failed => failed?.call(failure!),
+    };
+
+    assert(
+      value != null || otherwise != null,
+      'Either `${status.name}` or `otherwise` callback should be provided',
+    );
+
+    return value ?? otherwise!.call();
+  }
 
   // ignore: unused_element
   ActivityState<I, O, F> _initial() {
     return _copyWith(
-      status: ActivityStatus.initial,
+      status: .initial,
       failure: null,
       input: null,
       output: null,
@@ -51,7 +71,7 @@ class ActivityState<I, O, F> extends Equatable {
     return _copyWith(
       input: input ?? this.input,
       scope: scope ?? this.scope,
-      status: ActivityStatus.running,
+      status: .running,
       updatedAt: DateTime.now(),
     );
   }
@@ -61,7 +81,7 @@ class ActivityState<I, O, F> extends Equatable {
     Enum? scope,
   ]) {
     return _copyWith(
-      status: ActivityStatus.completed,
+      status: .completed,
       output: output ?? this.output,
       failure: null,
       scope: scope ?? this.scope,
@@ -74,7 +94,7 @@ class ActivityState<I, O, F> extends Equatable {
     Enum? scope,
   ]) {
     return _copyWith(
-      status: ActivityStatus.failed,
+      status: .failed,
       output: null,
       failure: failure,
       scope: scope ?? this.scope,
