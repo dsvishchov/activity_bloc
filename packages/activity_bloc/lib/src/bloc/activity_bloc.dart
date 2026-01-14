@@ -103,19 +103,17 @@ class ActivityBloc<I, O, F> extends Bloc<ActivityEvent, ActivityState<I, O, F>> 
     ]);
   }
 
-  T when<T>({
+  T? when<T>({
     T Function()? initial,
     T Function()? running,
     T Function(O output)? completed,
     T Function(F failure)? failed,
-    T Function()? otherwise,
   }) {
     return state.when(
       initial: initial,
       running: running,
       completed: completed,
       failed: failed,
-      otherwise: otherwise,
     );
   }
 

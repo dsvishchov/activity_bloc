@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
             running: () => CircularProgressIndicator(),
             completed: (user) => Text('User: ${user.firstName} ${user.lastName} (scope: ${getUser.scope})'),
             failed: (failure) => Text('Failure: ${failure.message}'),
-          ),
+          )!,
         ],
       ),
     );

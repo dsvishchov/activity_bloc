@@ -29,14 +29,13 @@ class ActivityState<I, O, F> extends Equatable {
   bool get isCompleted => status == .completed;
   bool get isFailed => status == .failed;
 
-  T when<T>({
+  T? when<T>({
     T Function()? initial,
     T Function()? running,
     T Function(O output)? completed,
     T Function(F failure)? failed,
-    T Function()? otherwise,
   }) {
-    final value = switch (status) {
+    return switch (status) {
       .initial => initial?.call(),
       .running => running?.call(),
       // ignore: null_check_on_nullable_type_parameter
@@ -44,13 +43,6 @@ class ActivityState<I, O, F> extends Equatable {
       // ignore: null_check_on_nullable_type_parameter
       .failed => failed?.call(failure!),
     };
-
-    assert(
-      value != null || otherwise != null,
-      'Either `${status.name}` or `otherwise` callback should be provided',
-    );
-
-    return value ?? otherwise!.call();
   }
 
   // ignore: unused_element

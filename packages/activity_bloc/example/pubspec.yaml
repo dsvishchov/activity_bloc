@@ -1,13 +1,13 @@
 name: activity_bloc_example
 description: An example of using activity_bloc package
 publish_to: none
-version: 0.0.12
+version: 0.0.13
 
 environment:
   sdk: ">=3.10.0 <4.0.0"
 
 dependencies:
-  activity_bloc: ^0.0.12
+  activity_bloc: ^0.0.13
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.6
@@ -15,7 +15,7 @@ dependencies:
   get_it: ^8.0.2
 
 dev_dependencies:
-  activity_bloc_builder: ^0.0.12
+  activity_bloc_builder: ^0.0.13
   build_runner: any
   flutter_test:
     sdk: flutter

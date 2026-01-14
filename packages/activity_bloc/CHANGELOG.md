@@ -1,3 +1,7 @@
+## 0.0.13
+
+- Make 'when' more flexible
+
 ## 0.0.12
 
 - Add 'when' to ActivityState but still expose to ActivityBloc as well
