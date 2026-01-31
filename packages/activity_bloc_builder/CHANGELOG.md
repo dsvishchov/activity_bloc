@@ -1,3 +1,7 @@
+## 0.0.14
+
+- Add global status changes stream
+
 ## 0.0.13
 
 - Make 'when' more flexible
