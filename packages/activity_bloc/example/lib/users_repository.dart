@@ -16,17 +16,20 @@ class UsersRepository {
   }) async {
     return Future.delayed(
       const Duration(seconds: 2),
-      () => (id == validUserId)
-        ? right(
-            User(
-              id: id,
-              firstName: 'John',
-              lastName: 'Doe',
-            ),
-          )
-        : left(
-            Failure(message: 'User with id $id does not exist'),
-          )
+      () {
+        // throw Exception('Uncomment to test exception handling');
+        return (id == validUserId)
+          ? right(
+              User(
+                id: id,
+                firstName: 'John',
+                lastName: 'Doe',
+              ),
+            )
+          : left(
+              Failure(message: 'User with id $id does not exist'),
+            );
+      }
     );
   }
 }

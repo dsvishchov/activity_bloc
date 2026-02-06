@@ -1,3 +1,7 @@
+## 0.0.15
+
+- Add global exception handler
+
 ## 0.0.14
 
 - Add global status changes stream

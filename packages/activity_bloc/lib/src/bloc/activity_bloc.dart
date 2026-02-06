@@ -30,9 +30,6 @@ part 'activity_state.dart';
 /// Use [runAndWait] to run activity and wait for its completion with either
 /// success or failure. Additionally `minWaitTime`  might be used to
 /// specify minimum amount of time to wait.
-///
-/// Use static [statusChange] stream to globally react on status changes,
-/// which can be useful for example for global failures handle.
 class ActivityBloc<I, O, F> extends Bloc<ActivityEvent, ActivityState<I, O, F>> {
   ActivityBloc({
     required this.activity,
@@ -59,10 +56,20 @@ class ActivityBloc<I, O, F> extends Bloc<ActivityEvent, ActivityState<I, O, F>> 
     }
   }
 
-  final ActivityWithInput<I, O, F> activity;
-
+  /// Global stream of activity blocs status changes.
+  ///
+  /// This might be useful for global failures handle, for example.
   static Stream<ActivityBloc> get statusChanges  => _statusChanges.stream;
   static final _statusChanges = StreamController<ActivityBloc>.broadcast();
+
+  /// Handler of exceptions thrown during activity execuction.
+  ///
+  /// If provided and returns an object of type F then it's used as a failure of
+  /// of the activity bloc, otherwise exception is rethrown.
+  static ExceptionHandler? onException;
+
+  /// Activity to be executed
+  final ActivityWithInput<I, O, F> activity;
 
   I? get input => state.input;
   O? get output => state.output;
@@ -137,40 +144,57 @@ class ActivityBloc<I, O, F> extends Bloc<ActivityEvent, ActivityState<I, O, F>> 
     ActivityRun<I> event,
     Emitter<ActivityState<I, O, F>> emit,
   ) async {
+    void onRunning() {
+      emit(
+        state._running(
+          event.input,
+          event.scope,
+        ),
+      );
+      _statusChanges.add(this);
+    }
+
+    void onFailed(F failure) {
+      emit(
+        state._failed(
+          failure,
+          event.scope,
+        ),
+      );
+      _statusChanges.add(this);
+    }
+
+    void onCompleted([O? output]) {
+      emit(
+        state._completed(
+          output,
+          event.scope,
+        ),
+      );
+      _statusChanges.add(this);
+    }
+
     if ((state.output == null) || !state.isInitial) {
       if (!event.silently) {
-        emit(
-          state._running(
-            event.input,
-            event.scope,
-          ),
-        );
-        _statusChanges.add(this);
+        onRunning();
       }
-      final result = await activity(event.input ?? state.input as I);
-      result.fold(
-        (F failure) {
-          emit(
-            state._failed(
-              failure,
-              event.scope,
-            ),
-          );
-          _statusChanges.add(this);
-        },
-        (O output) {
-          emit(
-            state._completed(
-              output,
-              event.scope,
-            ),
-          );
-          _statusChanges.add(this);
-        },
-      );
+
+      try {
+        final result = await activity(event.input ?? state.input as I);
+        result.fold(
+          (F failure) => onFailed(failure),
+          (O output) => onCompleted(output),
+        );
+      } catch (error, stackTrace) {
+        final failure = onException?.call(error, stackTrace);
+        if (failure is F) {
+          onFailed(failure);
+        } else {
+          rethrow;
+        }
+      }
     } else {
-      emit(state._completed());
-      _statusChanges.add(this);
+      onCompleted();
     }
   }
 }
@@ -180,6 +204,12 @@ typedef ActivityWithInput<I, O, F> = Future<Either<F, O>> Function(I);
 
 /// Activity with no input parameters
 typedef ActivityWithNoInput<O, F> = Future<Either<F, O>> Function();
+
+/// Exception handler
+typedef ExceptionHandler = dynamic Function(
+  Object? error,
+  StackTrace stackTrace,
+);
 
 /// Extension which provides a way to convert any [ActivityWithInput] into a Bloc.
 extension ActivityWithInputToBloc<I, O, F> on ActivityWithInput<I, O, F> {

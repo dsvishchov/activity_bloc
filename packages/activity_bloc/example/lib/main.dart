@@ -1,7 +1,9 @@
+import 'package:activity_bloc/activity_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
+import 'failure.dart';
 import 'users_repository.dart';
 
 final locator = GetIt.instance;
@@ -12,6 +14,10 @@ enum GetUserScope {
 
 void main() {
   locator.registerSingleton(UsersRepository());
+
+  ActivityBloc.onException = (error, stackTrace) {
+    return Failure(message: '$error');
+  };
 
   runApp(const MyApp());
 }
