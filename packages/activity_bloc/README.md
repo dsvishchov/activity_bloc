@@ -152,6 +152,23 @@ getUser.run(input: GetInput(...))
 And there is also a convenient method `runAnWait` to run and wait for activity to be completed,
 which might be helpful in cases you need to provide a `Future` and `await` it.
 
+## Configuration
+
+Additional code generation options can be provided within a build.yaml file.
+
+```yaml
+targets:
+  $default:
+    builders:
+      activity_bloc_builder:
+        options:
+          global_getters: false
+```
+
+Currently supported options:
+- `global_getters`: global getters through singleton instance of [get_it] will be generated,
+which might be quite useful if you use [get_it] for blocs lifecycle management
+
 ## Dependencies/limitations
 
 - As of now [activity_bloc] supports only async functions with return type of `Either` from
@@ -164,3 +181,4 @@ the [fpdart] package, which allows seamless error handling.
 [bloc]: https://pub.dartlang.org/packages/bloc
 [build_runner]: https://pub.dev/packages/build_runner
 [fpdart]: https://pub.dev/packages/fpdart
+[get_it]: https://pub.dev/packages/get_it

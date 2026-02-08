@@ -1,3 +1,7 @@
+## 0.0.16
+
+- Add builder option to generate global getters through get_it
+
 ## 0.0.15
 
 - Add global exception handler

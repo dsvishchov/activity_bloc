@@ -5,7 +5,7 @@ import 'src/activities_generator.dart';
 
 Builder activityBlocs(BuilderOptions options) {
   return SharedPartBuilder(
-    [ActivitiesGenerator()],
-    'activity_blocs',
+    [ActivitiesGenerator(options)],
+    'activity_bloc_builder',
   );
 }

@@ -6,6 +6,10 @@ import 'package:source_gen/source_gen.dart';
 import 'activity_bloc_generator.dart';
 
 class ActivitiesGenerator extends GeneratorForAnnotation<Activities> {
+  ActivitiesGenerator(this.options);
+
+  final BuilderOptions options;
+
   @override
   String generateForAnnotatedElement(
     Element element,
@@ -26,6 +30,7 @@ class ActivitiesGenerator extends GeneratorForAnnotation<Activities> {
 
       if (methodAnnotation != null) {
         final blocGenerator = ActivityBlocGenerator(
+          options,
           definingClass: definingClass,
           definingClassAnnotation: definingClassAnnotation,
           method: method.element,

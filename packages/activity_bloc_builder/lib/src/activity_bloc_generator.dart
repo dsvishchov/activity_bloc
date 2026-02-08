@@ -1,16 +1,19 @@
 import 'package:activity_bloc/activity_bloc.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
+import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 
 class ActivityBlocGenerator {
-  const ActivityBlocGenerator({
+  const ActivityBlocGenerator(
+    this.options, {
     required this.definingClass,
     required this.definingClassAnnotation,
     required this.method,
     required this.methodAnnotation,
   });
 
+  final BuilderOptions options;
   final ClassElement definingClass;
   final Activities definingClassAnnotation;
   final MethodElement method;
@@ -24,6 +27,7 @@ class ActivityBlocGenerator {
     return [
       _inputDefinition,
       _blocDefinition,
+      ?_getterImplementation,
     ].join();
   }
 
@@ -35,6 +39,7 @@ class ActivityBlocGenerator {
     final constructorParameters = _namedParameters
       .map((parameter) => '${parameter.isRequired ? 'required ' : ''} this.${parameter.firstFragment.name},')
       .join('\n');
+
     final fields = _namedParameters
       .map((parameter) => 'final ${parameter.type.getDisplayString()} ${parameter.firstFragment.name};')
       .join('\n');
@@ -103,6 +108,12 @@ class ActivityBlocGenerator {
       }
     ''';
   }
+
+  bool get _generateGetter => options.config['global_getters'] ?? false;
+
+  String? get _getterImplementation => _generateGetter
+    ? '$blocTypeName get $_name => GetIt.instance();'
+    : null;
 
   String get _name => methodAnnotation.name ?? method.firstFragment.name!;
 

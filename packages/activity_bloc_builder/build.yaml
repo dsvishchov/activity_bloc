@@ -1,5 +1,5 @@
 builders:
-  activity_bloc:
+  activity_bloc_builder:
     import: "package:activity_bloc_builder/activity_bloc_builder.dart"
     builder_factories: ["activityBlocs"]
     build_extensions: { ".dart": ["activity_blocs.g.part"] }

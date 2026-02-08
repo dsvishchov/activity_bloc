@@ -16,7 +16,7 @@ void main() {
   locator.registerSingleton(UsersRepository());
 
   ActivityBloc.onException = (error, stackTrace) {
-    return Failure(message: '$error');
+    return Failure(message: '$error}');
   };
 
   runApp(const MyApp());
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: BlocProvider(
         create: (_) => GetUserBloc(
-          source: locator.get<UsersRepository>(),
+          source: locator(),
         ),
         child: Builder(
           builder: (context) => Scaffold(
