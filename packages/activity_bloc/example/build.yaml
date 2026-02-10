@@ -3,4 +3,4 @@ targets:
     builders:
       activity_bloc_builder:
         options:
-          global_getters: false
+          mixin: true

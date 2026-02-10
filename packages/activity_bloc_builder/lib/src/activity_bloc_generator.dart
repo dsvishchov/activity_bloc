@@ -23,12 +23,15 @@ class ActivityBlocGenerator {
   String get stateTypeName => '${_typePrefix}State';
   String get blocTypeName => '${_typePrefix}Bloc';
 
-  String generate() {
+  String blocDefinition() {
     return [
       _inputDefinition,
       _blocDefinition,
-      ?_getterImplementation,
     ].join();
+  }
+
+  String mixinGetter() {
+    return '$blocTypeName get ${method.firstFragment.name} => blocs();';
   }
 
   String get _inputDefinition {
@@ -108,12 +111,6 @@ class ActivityBlocGenerator {
       }
     ''';
   }
-
-  bool get _generateGetter => options.config['global_getters'] ?? false;
-
-  String? get _getterImplementation => _generateGetter
-    ? '$blocTypeName get $_name => GetIt.instance();'
-    : null;
 
   String get _name => methodAnnotation.name ?? method.firstFragment.name!;
 

@@ -162,12 +162,11 @@ targets:
     builders:
       activity_bloc_builder:
         options:
-          global_getters: false
+          mnixin: true
 ```
 
 Currently supported options:
-- `global_getters`: global getters through singleton instance of [get_it] will be generated,
-which might be quite useful if you use [get_it] for blocs lifecycle management
+- `mixin`: a special mixin to seamlessly integrate with [bloc_scope] package will be generated
 
 ## Dependencies/limitations
 
@@ -181,4 +180,4 @@ the [fpdart] package, which allows seamless error handling.
 [bloc]: https://pub.dartlang.org/packages/bloc
 [build_runner]: https://pub.dev/packages/build_runner
 [fpdart]: https://pub.dev/packages/fpdart
-[get_it]: https://pub.dev/packages/get_it
+[bloc_scope]: https://pub.dev/packages/bloc_scope

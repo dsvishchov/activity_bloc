@@ -1,3 +1,7 @@
+## 0.0.17
+
+- Replace global get_it getters with mixin for bloc_scope
+
 ## 0.0.16
 
 - Add builder option to generate global getters through get_it

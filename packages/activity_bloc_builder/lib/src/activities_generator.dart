@@ -21,8 +21,16 @@ class ActivitiesGenerator extends GeneratorForAnnotation<Activities> {
     }
     final definingClass = element as ClassElement;
     final definingClassAnnotation = _getActivitiesAnnotation(definingClass);
+    final className = '${definingClass.firstFragment.name}';
 
-    final buffer = StringBuffer();
+    final blocsBuffer = StringBuffer();
+
+    final mixinBuffer = StringBuffer();
+    final mixinPrefix = definingClassAnnotation.prefix ?? className.replaceFirst('Repository', '');
+    mixinBuffer.write('''
+      mixin ${mixinPrefix}Blocs {
+        B blocs<B extends StateStreamableSource>([String? id]);\n
+    ''');
 
     final methods = definingClass.firstFragment.methods;
     for (final method in methods) {
@@ -37,11 +45,19 @@ class ActivitiesGenerator extends GeneratorForAnnotation<Activities> {
           methodAnnotation: methodAnnotation,
         );
 
-        buffer.write(blocGenerator.generate());
+        blocsBuffer.write(blocGenerator.blocDefinition());
+        mixinBuffer.write(blocGenerator.mixinGetter());
       }
     }
 
-    return buffer.toString();
+    mixinBuffer.write('}');
+
+    return [
+      blocsBuffer.toString(),
+      if (options.config['mixin']) ...[
+        mixinBuffer.toString(),
+      ],
+    ].join();
   }
 
   Activities _getActivitiesAnnotation(ClassElement element) {
