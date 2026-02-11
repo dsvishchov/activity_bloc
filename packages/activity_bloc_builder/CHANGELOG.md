@@ -1,3 +1,7 @@
+## 0.0.18
+
+- Minor fixes
+
 ## 0.0.17
 
 - Replace global get_it getters with mixin for bloc_scope

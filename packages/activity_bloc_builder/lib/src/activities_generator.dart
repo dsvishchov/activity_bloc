@@ -26,8 +26,10 @@ class ActivitiesGenerator extends GeneratorForAnnotation<Activities> {
     final blocsBuffer = StringBuffer();
 
     final mixinBuffer = StringBuffer();
-    final mixinPrefix = definingClassAnnotation.prefix ?? className.replaceFirst('Repository', '');
-    mixinBuffer.write('''
+    final mixinPrefix = definingClassAnnotation.prefix ??
+      className..replaceAll(RegExp(r'Repository|Service'), '');
+
+    mixinBuffer.write('''\n\n
       mixin ${mixinPrefix}Blocs {
         B blocs<B extends StateStreamableSource>([String? id]);\n
     ''');
@@ -54,7 +56,7 @@ class ActivitiesGenerator extends GeneratorForAnnotation<Activities> {
 
     return [
       blocsBuffer.toString(),
-      if (options.config['mixin']) ...[
+      if (options.config['mixin'] ?? false) ...[
         mixinBuffer.toString(),
       ],
     ].join();
