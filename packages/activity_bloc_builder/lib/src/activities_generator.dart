@@ -27,7 +27,7 @@ class ActivitiesGenerator extends GeneratorForAnnotation<Activities> {
 
     final mixinBuffer = StringBuffer();
     final mixinPrefix = definingClassAnnotation.prefix ??
-      className..replaceAll(RegExp(r'Repository|Service'), '');
+      className.replaceAll(RegExp(r'Repository|Service'), '');
 
     mixinBuffer.write('''\n\n
       mixin ${mixinPrefix}Blocs {
