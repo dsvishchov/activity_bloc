@@ -101,6 +101,7 @@ class ActivityBlocGenerator {
           super.scope,
           super.runImmediately,
           super.runSilently,
+          super.runEventTransformer,
         }) : super(
           activity: (input) => source.${method.firstFragment.name}(
             $activityParameters

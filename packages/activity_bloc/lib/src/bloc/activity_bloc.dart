@@ -30,6 +30,11 @@ part 'activity_state.dart';
 /// Use [runAndWait] to run activity and wait for its completion with either
 /// success or failure. Additionally `minWaitTime`  might be used to
 /// specify minimum amount of time to wait.
+///
+/// Use [runEventTransformer] to add a transformer for the run event. If
+/// provided, the run event will be transformed by this transformer before
+/// being added to the bloc. Equivalent to:
+/// `Bloc.on<ActivityRun<I>>(_onRun, transformer: runEventTransformer);`
 class ActivityBloc<I, O, F> extends Bloc<ActivityEvent, ActivityState<I, O, F>> {
   ActivityBloc({
     required this.activity,
@@ -38,6 +43,7 @@ class ActivityBloc<I, O, F> extends Bloc<ActivityEvent, ActivityState<I, O, F>> 
     Enum? scope,
     bool runImmediately = false,
     bool runSilently = false,
+    EventTransformer<ActivityRun<I>>? runEventTransformer,
   }) : super(
     ActivityState<I, O, F>(
       input: input,
@@ -45,7 +51,10 @@ class ActivityBloc<I, O, F> extends Bloc<ActivityEvent, ActivityState<I, O, F>> 
       scope: scope,
     ),
   ) {
-    on<ActivityRun<I>>(_onRun);
+    on<ActivityRun<I>>(
+      _onRun,
+      transformer: runEventTransformer,
+    );
     on<ActivityReset>(_onReset);
 
     if (runImmediately) {
